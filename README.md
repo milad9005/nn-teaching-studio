@@ -2,15 +2,17 @@
 
 **English** · [فارسی](README.fa.md)
 
-An interactive, bilingual (English / فارسی) environment for teaching neural networks from first principles: inputs and functions, weights and biases, activations, forward propagation, loss, derivatives, the chain rule, backpropagation, gradient descent and practical training.
+A visual, step-by-step course that explains how neural networks learn, from zero, in Persian and English. No maths background is needed beyond arithmetic.
 
-Every number on screen comes from one small, deterministic numerical engine that runs in the browser. Change a weight, an input, an activation or the learning rate, and the network diagram, equations, gradients, plots and training history all update from the same state.
+Each lesson is a short sequence of steps. On every step one sentence appears under a large picture, and the picture changes to show exactly that sentence. Click **Next** (or press the arrow key) and the story moves on. It works for reading alone, for teaching a class, and for recording a video.
 
-![Guided lesson: the chain rule](docs/screenshot-guided.png)
+Every number on screen comes from one small numerical engine that runs in the browser, so what you see is real.
 
-| Free exploration | Persian (right-to-left) |
+![A lesson step: the derivative](docs/screenshot-guided.png)
+
+| Persian (right-to-left) | Free exploration |
 | --- | --- |
-| ![Free exploration playground](docs/screenshot-explore.png) | ![Persian interface](docs/screenshot-fa.png) |
+| ![Persian lesson](docs/screenshot-fa.png) | ![Free exploration playground](docs/screenshot-explore.png) |
 
 - [Install and run (step by step, no programming needed)](#install-and-run-step-by-step)
 - [Troubleshooting](#troubleshooting)
@@ -117,52 +119,43 @@ Then open **http://localhost:5178** in your browser.
 
 ## Using the app
 
-- **Language**: the `فارسی` / `English` button in the top bar switches the whole interface, including right-to-left layout. Your network and values stay as they are.
-- **Guided lessons**: start at lesson 1 and use **Next** at the bottom of the left panel. The lesson menu in the top bar jumps to any lesson.
-- **Free exploration**: build your own network, pick a ready-made example (preset), and train it.
-- **Present**: a clean full-screen view for teaching in a class, controlled from the keyboard (keys below).
-- Panels can be resized by dragging their edges, closed with `×` and reopened from the buttons that appear at the edge.
-
-## Modes
-
-- **Guided lessons**: 18 lessons, each with objectives, an explanation split into reveal steps, predict-first prompts, an interactive demo, live equations, an optional "deeper math" section and a checkpoint. Previous / Next / Reset example are at the bottom of the left panel; the lesson menu is in the top bar.
-- **Free exploration**: a full playground. Pick a preset, add or remove neurons and hidden layers, choose activations and the loss, edit inputs, targets, weights and biases, step forward / backward / optimizer, train continuously, inspect any neuron or connection, view a 1-D loss slice and run a gradient check.
-- **Presentation**: distraction-free, larger type, step reveal and keyboard control.
+- **Lessons**: start at lesson 1. **Next** / **Previous** (or the arrow keys and Space) move through the steps; at the end of a lesson, **Next** goes on to the next one. The bar at the top shows all 12 lessons and where you are.
+- **Explanation** (the panel beside the picture): every step's sentence plus a fuller explanation, for reading on your own. Close it if you don't need it.
+- **Language**: the `فارسی` / `English` button switches everything, including the right-to-left layout. In Persian, the left arrow is "next".
+- **Free exploration**: a playground to build your own network, pick a ready-made example and train it.
+- **Present**: hides the menus for teaching or recording.
 
 ### Presentation keys
 
 | Key | Action |
 | --- | --- |
-| `→` / `Space` | Reveal the next block (then forward-step the network) |
-| `←` | Hide the last revealed block |
+| `→` / `Space` (Persian: `←` / `Space`) | Next step |
+| `←` (Persian: `→`) | Previous step |
 | `PgDn` / `PgUp` | Next / previous lesson |
-| `B` | Backward step |
-| `A` | Hide or show advanced math |
+| `T` | Hide or show the sentence under the picture (narrate over a clean picture) |
 | `L` | Laser pointer |
-| `D` | Draw annotations, `C` clears them |
+| `D` | Draw on the screen, `C` clears it |
 | `F` | Full screen |
 | `Esc` | Leave presentation |
 
 ## Lessons
 
-1. Inputs and Outputs
-2. Weight and Bias
-3. Activation Functions
-4. Multiple Neurons
-5. Forward Propagation
-6. Predictions and Loss
-7. Derivatives from Zero
-8. Derivative of Loss with Respect to Weight
-9. Multiple Weights and Partial Derivatives
-10. The Chain Rule (core worked example)
-11. Backpropagation
-12. Gradient Descent
-13. Learning Rate
-14. Batch, Mini-Batch and Epoch
-15. Optimizers
-16. Weight Initialization
-17. Overfitting and Generalization
-18. Training vs Inference
+One story in 12 lessons. The same machine, the same knobs and the same example (2 notebooks, a real price of 10 coins) carry through all of them, and later lessons point back to the earlier ones they build on.
+
+1. **The number machine**: a function is a machine with a rule; its picture is a graph.
+2. **The machine's knobs: a neuron**: `ŷ = w·x + b`; the weight is the slope of the line, the bias shifts it.
+3. **Bending and building a network**: ReLU, layers, the forward pass.
+4. **How wrong is it? The loss**: error, squaring, averaging; the loss is not the output.
+5. **Slope = derivative**: nudge a knob and watch the loss; zoom into the curve until it is a straight line.
+6. **Walking downhill: gradient descent**: step against the slope; the learning rate.
+7. **Many knobs: the gradient**: one slope per knob; the loss landscape.
+8. **The chain rule**: gears; rates multiply through a network.
+9. **Backpropagation**: one trip backwards gives every knob's slope.
+10. **Learning from data**: batches and epochs.
+11. **Better steps, a good start**: momentum, Adam, random starting weights.
+12. **Memorising or learning?**: overfitting, validation, using the trained network.
+
+The full script, every step in Persian and English with what the picture shows, is in [docs/storyboard.md](docs/storyboard.md).
 
 ## For developers
 
@@ -171,8 +164,8 @@ Requirements: Node 20+ and npm. The end-to-end tests use the locally installed G
 | Command | What it does |
 | --- | --- |
 | `npm run dev` | Development server at http://localhost:5178 |
-| `npm test` | Unit tests (Vitest): engine math, gradients vs finite differences, presets, optimizers, lesson math |
-| `npm run e2e` | End-to-end tests (Playwright, local Chrome): core example, RTL switch, stepping, training, presentation |
+| `npm test` | Unit tests (Vitest): engine math, gradients vs finite differences, presets, optimizers, lesson numbers, course structure |
+| `npm run e2e` | End-to-end tests (Playwright, local Chrome): every step of every lesson in both languages, keys, presentation, playground |
 | `npm run typecheck` | TypeScript check |
 | `npm run build` | Typecheck and production build into `dist/` |
 
@@ -191,21 +184,22 @@ src/
     presets      the 12 named teaching scenarios
   state/
     lab.ts       the shared network workspace (Zustand). All network panels read it.
-    lessonState  per-lesson state shared by a lesson's four panels
-    ui.ts        language, theme, mode, lesson, panel sizes, presentation (persisted)
+    lessonState  lesson-local state (survives language switches)
+    ui.ts        language, theme, mode, lesson, step, panels, presentation (persisted)
   i18n/          interface strings (en, fa) and preset text; lesson prose lives with lessons
-  components/    Tex (KaTeX), Plot2D (SVG), PlotlyChart (3-D/contour), NetworkCanvas
-                 (React Flow), Inspector, lab panels, controls, teaching blocks
-  shell/         top bar, four-panel workspace, guided / explore modes, presentation layer
-  lessons/       one file per lesson + registry (index.ts)
+  components/    Tex (KaTeX), Plot2D (SVG), PlotlyChart (3-D), NetworkCanvas (React Flow),
+                 NumberLine, Inspector, lab panels, controls, prose (inline math in text)
+  story/         the course: curriculum.ts (order and titles), StoryView (picture + sentence +
+                 steps), kit.tsx (shared visuals: machine, knob, meter, cards), useTween
+                 (animation), lessons/NN-id.tsx (one file per lesson) with math-id.ts helpers
+  shell/         top bar, playground workspace, presentation layer
 e2e/             Playwright tests
 ```
 
 ### One source of truth
 
-- Network lessons and the playground read `useLab` (state) and `useLabDerived()` (forward trace, loss and gradients for the selected example, the full batch and the next mini-batch, memoized from the state). Nothing stores a copy of a computed value.
-- Stand-alone lessons keep their inputs in `useLessonState(id, init)` and compute everything else from it on render.
-- The forward/backward stepper only controls what is *revealed*; the values are always the engine's.
+- Network lessons and the playground read `useLab` (state) and `useLabDerived()` (forward trace, loss and gradients, memoized from the state). Nothing stores a copy of a computed value.
+- A lesson scene draws the state for its current `step` and computes every number it shows with the engine or its `math-<id>.ts` helper (unit-tested).
 
 ### Conventions
 
@@ -245,9 +239,9 @@ All of these are asserted in `src/engine/training.test.ts` and `src/engine/engin
 
 It then appears in the playground's preset picker, and a lesson can load it with `presetId`.
 
-**A new lesson**
+**A new lesson or step**
 
-1. Create `src/lessons/lNN-name.tsx` exporting a `LessonDef` (see `src/lessons/types.ts`): `Explain` (left), `Center` (main visual), optional `Right` (parameters and equations) and `Bottom` (graphs).
-2. Keep state in `useLessonState('lNN', init)` or set `presetId` and read `useLab` / `useLabDerived`. Compute every displayed value from that state with the engine.
-3. Write prose with `bi('English', 'فارسی')` and `<P>` (inline math as `$...$`), split it into `<Reveal at={n}>` blocks and set `revealSteps`. Add a `<Predict>` before results and a `checkpoint`.
-4. Register it in `src/lessons/index.ts`. Put pure math in `src/lessons/math/` with a unit test.
+1. Write the step in [docs/storyboard.md](docs/storyboard.md) first: the Persian sentence, the English sentence and what the picture shows.
+2. A lesson is `src/story/lessons/NN-id.tsx` exporting a `StoryLesson` (`src/story/types.ts`): `steps` (each with `say`, a fuller `more` explanation and an optional `recall` of an earlier lesson) and a `Scene` component that draws the picture for a given `step`. Register the id and title in `src/story/curriculum.ts`.
+3. Use the shared visuals in `src/story/kit.tsx` (machine, knob, loss meter, value cards, the same colours) so the course looks like one story, and `useTween` so changes animate.
+4. Run `npm test` and `npm run e2e`. `src/story/story.test.ts` checks that every step is written in both languages, that recalls only point backwards and that no untaught notation appears.

@@ -1,0 +1,257 @@
+/* ---- Lesson mode: one visual, one sentence, next ---- */
+.story {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+}
+.journey {
+  display: flex;
+  gap: 2px;
+  overflow-x: auto;
+  padding: 2px 2px 4px;
+  flex: none;
+}
+.journey-stop {
+  flex: 1 1 0;
+  min-width: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--muted);
+  cursor: pointer;
+  position: relative;
+  padding: 2px 0;
+}
+.journey-stop::before {
+  content: '';
+  position: absolute;
+  top: 13px;
+  inset-inline-start: -50%;
+  width: 100%;
+  height: 2px;
+  background: var(--line);
+  z-index: 0;
+}
+.journey-stop:first-child::before { display: none; }
+.journey-stop.done::before,
+.journey-stop.on::before { background: var(--accent); }
+.journey-dot {
+  position: relative;
+  z-index: 1;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 0.72em;
+  font-weight: 700;
+  background: var(--surface);
+  border: 2px solid var(--line-strong);
+}
+.journey-stop.done .journey-dot { border-color: var(--accent); color: var(--accent); }
+.journey-stop.on .journey-dot { background: var(--accent); border-color: var(--accent); color: var(--surface); transform: scale(1.15); }
+.journey-stop.on { color: var(--ink); font-weight: 600; }
+.journey-name { font-size: 0.72em; white-space: nowrap; }
+
+.story-body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+.story.with-explain .story-body { grid-template-columns: minmax(0, 1fr) 340px; }
+.story-stage {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.story-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 10px 18px 0;
+}
+.story-num { color: var(--accent); font-size: 0.85em; font-weight: 700; }
+.story-title { font-size: 1.25em; margin: 0; }
+.scene {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 8px 18px;
+  display: flex;
+  flex-direction: column;
+}
+.caption-box {
+  border-top: 1px solid var(--line);
+  padding: 10px 18px 12px;
+  background: var(--surface-2);
+}
+.step-dots { display: flex; gap: 5px; margin-bottom: 6px; flex-wrap: wrap; }
+.step-dot {
+  width: 22px;
+  height: 5px;
+  border-radius: 3px;
+  border: 0;
+  padding: 0;
+  background: var(--line-strong);
+  cursor: pointer;
+}
+.step-dot.done { background: var(--accent); opacity: 0.45; }
+.step-dot.on { background: var(--accent); }
+.caption {
+  font-size: 1.3em;
+  line-height: 1.6;
+  margin: 2px 0 8px;
+  min-height: 3.2em;
+  animation: caption-in 0.35s ease;
+}
+:root[dir='rtl'] .caption { font-size: 1.38em; }
+@keyframes caption-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+.recall-chip {
+  display: inline-flex;
+  gap: 6px;
+  align-items: baseline;
+  border: 1px solid var(--accent);
+  background: var(--accent-soft);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 3px 12px;
+  margin-bottom: 8px;
+  font: inherit;
+  font-size: 0.85em;
+  cursor: pointer;
+}
+.step-nav { display: flex; align-items: center; gap: 8px; }
+.step-count { color: var(--muted); min-width: 3.5em; text-align: center; }
+.story-explain {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  overflow: auto;
+  min-height: 0;
+}
+.story-explain h2 { font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 8px; }
+:root[dir='rtl'] .story-explain h2 { text-transform: none; letter-spacing: 0; }
+.transcript { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; counter-reset: t; }
+.transcript li { counter-increment: t; cursor: pointer; color: var(--muted); }
+.transcript li::before { content: counter(t); font-size: 0.7em; font-weight: 700; color: var(--accent); margin-inline-end: 6px; }
+.transcript li.on { color: var(--ink); }
+.transcript .t-say { display: inline; margin: 0; }
+.transcript .t-more {
+  margin: 8px 0 0;
+  padding: 8px 10px;
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+  line-height: 1.7;
+}
+
+.app.presenting .story-stage { border: 0; }
+.app.presenting .caption { font-size: 1.6em; }
+
+/* ---- Scene kit ---- */
+.stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 0;
+}
+.stage-row { flex-direction: row; flex-wrap: wrap; }
+.appear { opacity: 0; transform: translateY(8px); transition: opacity 0.45s ease, transform 0.45s ease; }
+.appear.on { opacity: 1; transform: none; }
+:root[data-motion='reduced'] .appear { transition: none; }
+.knob, .meter { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.knob-label, .meter-label { font-weight: 700; font-size: 0.95em; }
+.knob-value, .meter-value { font-size: 1.15em; font-weight: 700; }
+.vcard {
+  border: 2px solid;
+  border-radius: var(--radius);
+  padding: 10px 16px;
+  background: var(--surface);
+  min-width: 140px;
+  text-align: center;
+}
+.vcard.big { min-width: 190px; padding: 14px 22px; }
+.vcard-label { font-weight: 700; }
+.vcard-value { font-size: 1.9em; font-weight: 700; }
+.vcard.big .vcard-value { font-size: 2.6em; }
+.vcard-note { font-size: 0.8em; color: var(--muted); }
+.machine { display: flex; align-items: center; gap: 12px; justify-content: center; }
+.machine-io { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.machine-slot {
+  width: 96px;
+  height: 96px;
+  border: 3px solid;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 2.2em;
+  font-weight: 700;
+  background: var(--surface);
+}
+.slot-val { animation: slot-in 0.5s ease; }
+@keyframes slot-in {
+  from { opacity: 0; transform: scale(0.6); }
+  to { opacity: 1; transform: none; }
+}
+.machine-cap { font-size: 0.8em; color: var(--muted); }
+.machine-arrow { font-size: 2.4em; color: var(--line-strong); }
+.machine-box {
+  position: relative;
+  min-width: 230px;
+  min-height: 150px;
+  border: 2px solid var(--ink-2);
+  border-radius: 14px;
+  background: var(--surface-2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 22px;
+  font-size: 1.5em;
+}
+.machine-box.pulse { animation: box-pulse 0.6s ease; }
+@keyframes box-pulse {
+  40% { box-shadow: 0 0 0 8px var(--accent-soft); }
+}
+:root[data-motion='reduced'] .machine-box.pulse,
+:root[data-motion='reduced'] .slot-val,
+:root[data-motion='reduced'] .caption { animation: none; }
+.machine-knobs { display: flex; gap: 10px; }
+.machine-lock { position: absolute; top: 4px; inset-inline-end: 8px; font-size: 0.8em; }
+.scene-formula { text-align: center; }
+.scene-note { color: var(--muted); font-size: 0.85em; text-align: center; margin: 0; }
+
+@media (max-width: 900px) {
+  .story.with-explain .story-body { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) auto; }
+  .story-explain { max-height: 30vh; }
+  .journey-name { display: none; }
+}
+
+/* Video-sized text for the shared plot and network components inside a lesson scene. */
+.scene .plot2d .lbl { font-size: 17px; font-weight: 700; }
+.scene .plot2d .ticks text { font-size: 14px; }
+.scene .axis-label { font-size: 15px; }
+.scene .nn-unit { font-size: 21px; width: 150px; padding-top: 14px; }
+.scene .nn-unit .nn-act { font-size: 15px; }
+.scene .nn-wlabel { font-size: 20px; font-weight: 700; }
+.scene .react-flow__controls { display: none; }
+/* Numbers and symbols in drawings always read left to right, also in Persian. */
+.scene svg { direction: ltr; }

@@ -15,6 +15,7 @@ export type PresetId =
   | 'one-vs-many'
   | 'temperature'
   | 'single-weight'
+  | 'weight-bias'
   | 'two-weight'
   | 'chain-two'
   | 'branching'
@@ -53,7 +54,6 @@ const base = (p: Partial<Preset> & Pick<Preset, 'id' | 'net' | 'data'>): Preset 
 const overfitX = [-1.9, -1.4, -0.9, -0.35, 0.2, 0.7, 1.25, 1.8];
 const overfitNoise = [0.25, -0.3, 0.2, -0.25, 0.3, -0.2, 0.25, -0.3];
 const truth = (x: number) => Math.sin((Math.PI * x) / 2);
-const valRng = mulberry32(9);
 const valX = linspace(-1.95, 1.95, 14);
 
 export const PRESETS: Record<PresetId, () => Preset> = {
@@ -95,6 +95,12 @@ export const PRESETS: Record<PresetId, () => Preset> = {
       net: makeNetwork([1, 1], ['linear'], () => 3, () => 0),
       data: { X: [[2]], Y: [[10]] },
       frozen: ['b1[0]'],
+    }),
+  'weight-bias': () =>
+    base({
+      id: 'weight-bias',
+      net: makeNetwork([1, 1], ['linear'], () => 3, () => 0),
+      data: { X: [[2]], Y: [[10]] },
     }),
   'two-weight': () =>
     base({
@@ -157,7 +163,11 @@ export const PRESETS: Record<PresetId, () => Preset> = {
       id: 'overfit',
       net: initialize(makeNetwork([1, 8, 1], ['tanh', 'linear']), 'xavier', 4),
       data: { X: overfitX.map((x) => [x]), Y: overfitX.map((x, i) => [truth(x) + overfitNoise[i]]) },
-      val: { X: valX.map((x) => [x]), Y: valX.map((x) => [truth(x) + normal(valRng, 0, 0.25)]) },
+      val: (() => {
+        // A fresh generator per load, so every load gives the same validation points.
+        const rng = mulberry32(9);
+        return { X: valX.map((x) => [x]), Y: valX.map((x) => [truth(x) + normal(rng, 0, 0.25)]) };
+      })(),
       opt: defaultOptimizer('adam', 0.03),
     }),
 };

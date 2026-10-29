@@ -1,10 +1,11 @@
-// Presentation layer: keyboard control, step reveal, laser pointer and freehand annotations.
+// Presentation layer for recording or teaching: no menus, a big visual, keyboard control,
+// optional captions, laser pointer and freehand annotations.
 
 import { useEffect, useRef, useState } from 'react';
 import { useUi } from '../state/ui';
 import { useT } from '../i18n';
-import { LESSONS } from '../lessons';
-import { useLab } from '../state/lab';
+import { LESSONS } from '../story';
+import { stepBy } from '../story/StoryView';
 
 const typing = (e: KeyboardEvent) => {
   const el = e.target as HTMLElement;
@@ -16,29 +17,19 @@ export function usePresentationKeys() {
     const onKey = (e: KeyboardEvent) => {
       const ui = useUi.getState();
       if (!ui.presentation || typing(e) || e.metaKey || e.ctrlKey || e.altKey) return;
-      const lesson = LESSONS[ui.lessonIndex];
-      const maxReveal = ui.mode === 'guided' ? lesson.revealSteps : 0;
       const k = e.key;
-      if (k === 'ArrowRight' || k === ' ') {
+      // Steps (arrows, space) are handled by the lesson view itself.
+      if (k === 'PageDown') {
         e.preventDefault();
-        // With RTL the visual direction flips but "next" stays on the forward key.
-        if (ui.reveal < maxReveal) ui.set({ reveal: ui.reveal + 1 });
-        else useLab.getState().forwardStep();
-      } else if (k === 'ArrowLeft') {
-        e.preventDefault();
-        if (ui.reveal > 0) ui.set({ reveal: ui.reveal - 1 });
-      } else if (k === 'PageDown') {
-        e.preventDefault();
-        if (ui.lessonIndex < LESSONS.length - 1) ui.set({ lessonIndex: ui.lessonIndex + 1, reveal: 0, mode: 'guided' });
+        if (ui.lessonIndex < LESSONS.length - 1) ui.goLesson(ui.lessonIndex + 1);
       } else if (k === 'PageUp') {
         e.preventDefault();
-        if (ui.lessonIndex > 0) ui.set({ lessonIndex: ui.lessonIndex - 1, reveal: 0, mode: 'guided' });
-      } else if (k === 'a' || k === 'A') ui.toggle('hideAdvanced');
+        if (ui.lessonIndex > 0) ui.goLesson(ui.lessonIndex - 1);
+      } else if (k === 't' || k === 'T') ui.toggle('captions');
       else if (k === 'l' || k === 'L') ui.set({ laser: !ui.laser, draw: false });
       else if (k === 'd' || k === 'D') ui.set({ draw: !ui.draw, laser: false });
       else if (k === 'c' || k === 'C') ui.set({ clearInk: ui.clearInk + 1 });
       else if (k === 'f' || k === 'F') toggleFullscreen();
-      else if (k === 'b' || k === 'B') useLab.getState().backwardStep();
       else if (k === 'Escape') ui.set({ presentation: false, laser: false, draw: false });
     };
     window.addEventListener('keydown', onKey);
@@ -55,19 +46,25 @@ export function PresentationBar() {
   const { t } = useT();
   const ui = useUi();
   const lesson = LESSONS[ui.lessonIndex];
-  const maxReveal = ui.mode === 'guided' ? lesson.revealSteps : 0;
   return (
     <div className="present-bar" role="toolbar" data-testid="present-bar">
-      <button className="btn sm" onClick={() => ui.set({ reveal: Math.max(0, ui.reveal - 1) })} disabled={ui.reveal === 0}>
-        ←
-      </button>
-      <span className="num small">
-        {Math.min(ui.reveal, maxReveal)} / {maxReveal}
-      </span>
-      <button className="btn sm primary" onClick={() => ui.set({ reveal: Math.min(maxReveal, ui.reveal + 1) })} disabled={ui.reveal >= maxReveal} data-testid="present-next">
-        {t('present.next')} →
-      </button>
-      <span className="sep" />
+      {ui.mode === 'guided' && (
+        <>
+          <button className="btn sm" onClick={() => stepBy(-1)}>
+            {t('nav.prev')}
+          </button>
+          <span className="num small">
+            {ui.step + 1} / {lesson.steps.length}
+          </span>
+          <button className="btn sm primary" onClick={() => stepBy(1)} data-testid="present-next">
+            {t('nav.next')}
+          </button>
+          <span className="sep" />
+          <button className={`btn sm ${ui.captions ? 'active' : ''}`} onClick={() => ui.toggle('captions')} data-testid="captions-toggle">
+            {t('present.captions')}
+          </button>
+        </>
+      )}
       <button className={`btn sm ${ui.laser ? 'active' : ''}`} onClick={() => ui.set({ laser: !ui.laser, draw: false })}>
         ◉ {t('present.laser')}
       </button>
@@ -76,9 +73,6 @@ export function PresentationBar() {
       </button>
       <button className="btn sm" onClick={() => ui.set({ clearInk: ui.clearInk + 1 })}>
         {t('present.clear')}
-      </button>
-      <button className={`btn sm ${ui.hideAdvanced ? 'active' : ''}`} onClick={() => ui.toggle('hideAdvanced')}>
-        {t('present.hideMath')}
       </button>
       <button className="btn sm" onClick={toggleFullscreen}>
         ⛶ {t('present.fullscreen')}

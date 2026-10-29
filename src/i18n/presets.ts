@@ -37,6 +37,13 @@ export const PRESET_TEXT: Record<PresetId, { name: Bi; outcome: Bi }> = {
       fa: 'L(w) = (2w − 10)²: یک سهمی که پایین‌ترین نقطه‌اش w = 5 است.',
     },
   },
+  'weight-bias': {
+    name: { en: 'Weight and Bias Together', fa: 'وزن و بایاس با هم' },
+    outcome: {
+      en: 'x = 2, w = 3, b = 0, y = 10: L = 16, gradient (∂L/∂w, ∂L/∂b) = (−16, −8).',
+      fa: 'x = 2، w = 3، b = 0، y = 10: خطا L = 16، گرادیان (∂L/∂w, ∂L/∂b) = (−16, −8).',
+    },
+  },
   'two-weight': {
     name: { en: 'Two-Weight Loss Landscape', fa: 'منظره خطا با دو وزن' },
     outcome: {

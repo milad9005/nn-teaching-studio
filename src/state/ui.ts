@@ -13,10 +13,13 @@ export interface UiState {
   theme: Theme;
   mode: Mode;
   lessonIndex: number;
+  /** Current step inside the lesson (0-based). */
+  step: number;
+  /** Side panel with the fuller written explanation. */
+  explainOpen: boolean;
+  /** Captions under the visual (turn off to narrate over a clean visual). */
+  captions: boolean;
   presentation: boolean;
-  /** Presentation step reveal: blocks with `at > reveal` stay hidden while presenting. */
-  reveal: number;
-  hideAdvanced: boolean;
   laser: boolean;
   draw: boolean;
   /** Bumped to clear annotations. */
@@ -29,7 +32,7 @@ export interface UiState {
   size: Record<PanelId, number>;
   completed: Record<string, boolean>;
   set: (p: Partial<UiState>) => void;
-  toggle: (k: 'presentation' | 'hideAdvanced' | 'laser' | 'draw' | 'reducedMotion') => void;
+  toggle: (k: 'presentation' | 'explainOpen' | 'captions' | 'laser' | 'draw' | 'reducedMotion') => void;
   togglePanel: (p: PanelId) => void;
   goLesson: (i: number) => void;
 }
@@ -44,9 +47,10 @@ export const useUi = create<UiState>()(
       theme: 'system',
       mode: 'guided',
       lessonIndex: 0,
+      step: 0,
+      explainOpen: true,
+      captions: true,
       presentation: false,
-      reveal: 0,
-      hideAdvanced: false,
       laser: false,
       draw: false,
       clearInk: 0,
@@ -59,7 +63,7 @@ export const useUi = create<UiState>()(
       set: (p) => set(p),
       toggle: (k) => set((s) => ({ [k]: !s[k] }) as Partial<UiState>),
       togglePanel: (p) => set((s) => ({ collapsed: { ...s.collapsed, [p]: !s.collapsed[p] } })),
-      goLesson: (i) => set({ lessonIndex: i, reveal: 0, mode: 'guided' }),
+      goLesson: (i) => set({ lessonIndex: i, step: 0, mode: 'guided' }),
     }),
     {
       name: 'nnts-ui',
@@ -68,7 +72,9 @@ export const useUi = create<UiState>()(
         theme: s.theme,
         mode: s.mode,
         lessonIndex: s.lessonIndex,
-        hideAdvanced: s.hideAdvanced,
+        step: s.step,
+        explainOpen: s.explainOpen,
+        captions: s.captions,
         speed: s.speed,
         collapsed: s.collapsed,
         size: s.size,

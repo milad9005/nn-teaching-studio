@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useUi } from './state/ui';
 import { TopBar } from './shell/TopBar';
-import { GuidedMode } from './shell/Guided';
+import { StoryView } from './story/StoryView';
 import { ExploreMode } from './shell/Explore';
 import { InkLayer, PresentationBar, usePresentationKeys } from './shell/Presentation';
 import { useTrainingLoop } from './components/LabPanels';
@@ -36,7 +36,7 @@ export default function App() {
   return (
     <div className={`app ${presentation ? 'presenting' : ''}`}>
       {!presentation && <TopBar />}
-      <main className="app-main">{mode === 'guided' ? <GuidedMode /> : <ExploreMode />}</main>
+      <main className="app-main">{mode === 'guided' ? <StoryView /> : <ExploreMode />}</main>
       {presentation && <PresentationBar />}
       {presentation && <InkLayer />}
     </div>

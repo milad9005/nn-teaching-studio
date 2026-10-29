@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useUi } from '../state/ui';
 import { useT } from '../i18n';
-import { LESSONS } from '../lessons';
+import { LESSONS } from '../story';
 
 export function TopBar() {
   const { t, tr, lang } = useT();
@@ -74,7 +74,7 @@ export function TopBar() {
         <input type="checkbox" checked={ui.reducedMotion} onChange={() => ui.toggle('reducedMotion')} />
         {t('reducedMotion')}
       </label>
-      <button className="btn primary sm" onClick={() => ui.set({ presentation: true, reveal: 0 })} data-testid="present">
+      <button className="btn primary sm" onClick={() => ui.set({ presentation: true })} data-testid="present">
         ▣ {t('mode.present')}
       </button>
     </header>

@@ -58,7 +58,7 @@ type WeightData = {
   label: string;
 };
 
-const ACT_SYMBOL: Record<ActivationName, string> = { linear: 'id', relu: 'ReLU', sigmoid: 'σ', tanh: 'tanh', softmax: 'softmax' };
+const ACT_SYMBOL: Record<ActivationName, string> = { linear: '', relu: 'ReLU', sigmoid: 'σ', tanh: 'tanh', softmax: 'softmax' };
 
 /** Briefly highlights its parent when `value` changes after mount, to show cause and effect. */
 function Flash({ value, enabled }: { value: string; enabled: boolean }) {
@@ -79,7 +79,7 @@ const UnitNode = memo(function UnitNode({ data }: NodeProps<Node<UnitData>>) {
       {d.kind !== 'output' && <Handle type="source" position={Position.Right} />}
       {d.kind === 'output' && <Handle type="source" position={Position.Right} id="out" />}
       <Flash value={`${fmt(d.a ?? 0, 4)}`} enabled={d.flash && d.showA} />
-      {d.act && <div className="nn-act">{ACT_SYMBOL[d.act]}</div>}
+      {d.act && ACT_SYMBOL[d.act] && <div className="nn-act">{ACT_SYMBOL[d.act]}</div>}
       <div className="nn-vals">
         {d.kind !== 'input' && <span className="c-z">{d.showA && d.z !== undefined ? `z ${fmt(d.z, 2)}` : 'z ?'}</span>}
         <span className={d.kind === 'input' ? 'c-x' : d.kind === 'output' ? 'c-yhat' : 'c-a'}>

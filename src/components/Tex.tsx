@@ -11,6 +11,8 @@ const macros: Record<string, string> = {
   '\\cz': '\\htmlClass{c-z}{#1}',
   '\\ca': '\\htmlClass{c-a}{#1}',
   '\\cyhat': '\\htmlClass{c-yhat}{#1}',
+  // Output of a plain function (Stage 1), same colour as the prediction.
+  '\\cout': '\\htmlClass{c-yhat}{#1}',
   '\\cy': '\\htmlClass{c-y}{#1}',
   '\\cL': '\\htmlClass{c-L}{#1}',
   '\\cg': '\\htmlClass{c-g}{#1}',

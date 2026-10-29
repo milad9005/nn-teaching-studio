@@ -135,6 +135,15 @@ describe('presets', () => {
     expect(r.state.net.layers[0].b[0]).toBe(0); // frozen
   });
 
+  it('weight-bias: loss 16 and gradient (dL/dw, dL/db) = (-16, -8)', () => {
+    const p = loadPreset('weight-bias');
+    close(datasetLoss(p.net, p.data, 'mse'), 16);
+    const r = trainStep(newTrainState(p.net, p.data, cfgOf(p)), p.data, cfgOf(p));
+    if (!r.ok) throw new Error();
+    close(r.grads.W[0][0][0], -16);
+    close(r.grads.b[0][0], -8);
+  });
+
   it('gd-step: w 3 -> 3.8, loss 16 -> 5.76', () => {
     const p = loadPreset('gd-step');
     const r = trainStep(newTrainState(p.net, p.data, cfgOf(p)), p.data, cfgOf(p));
