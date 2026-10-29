@@ -1,0 +1,506 @@
+/* Design tokens. Semantic math colors are used everywhere: equations, graphs, network. */
+:root {
+  --bg: #f6f5f1;
+  --surface: #ffffff;
+  --surface-2: #f1efe9;
+  --well: #ebe8e0;
+  --ink: #1c1b19;
+  --ink-2: #45433e;
+  --muted: #75716a;
+  --line: #e2dfd6;
+  --line-strong: #c9c4b8;
+  --accent: #3554d1;
+  --accent-soft: #e5eafc;
+  --focus: #3554d1;
+  --danger: #c2341d;
+  --ok: #18794e;
+
+  /* math semantics */
+  --c-x: #2a62d9;       /* input */
+  --c-w: #7a3fd1;       /* weight */
+  --c-wpos: #0e8a7a;    /* positive weight (edges) */
+  --c-wneg: #d4561c;    /* negative weight (edges) */
+  --c-b: #a26a07;       /* bias */
+  --c-z: #5f6773;       /* pre-activation */
+  --c-a: #0b8db0;       /* activation */
+  --c-yhat: #15803d;    /* prediction */
+  --c-y: #b7791f;       /* target */
+  --c-L: #d02f2f;       /* loss */
+  --c-g: #c0269e;       /* gradient */
+  --c-lr: #4b5563;      /* learning rate */
+
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.05), 0 4px 16px rgb(0 0 0 / 0.04);
+  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-head: 'Bricolage Grotesque', 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --scale: 1;
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --bg: #121315;
+  --surface: #1a1c1f;
+  --surface-2: #202327;
+  --well: #26292e;
+  --ink: #eceae4;
+  --ink-2: #c9c6be;
+  --muted: #9a968e;
+  --line: #2e3136;
+  --line-strong: #43474e;
+  --accent: #8ea4ff;
+  --accent-soft: #263055;
+  --focus: #8ea4ff;
+  --danger: #ff8a73;
+  --ok: #5fd39a;
+
+  --c-x: #7aa5ff;
+  --c-w: #b892ff;
+  --c-wpos: #3cc9b4;
+  --c-wneg: #ff8f5a;
+  --c-b: #e3b04b;
+  --c-z: #a3abb7;
+  --c-a: #4cc6e8;
+  --c-yhat: #5fd38a;
+  --c-y: #f0c060;
+  --c-L: #ff7676;
+  --c-g: #f070d4;
+  --c-lr: #b8c0cc;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.4);
+  color-scheme: dark;
+}
+
+:root[dir='rtl'] {
+  --font-sans: 'Vazirmatn', 'IBM Plex Sans', system-ui, sans-serif;
+  --font-head: 'Vazirmatn', 'Bricolage Grotesque', system-ui, sans-serif;
+}
+
+:root[data-present='true'] {
+  --scale: 1.28;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: calc(15px * var(--scale));
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+:root[dir='rtl'] body {
+  line-height: 1.8;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-head);
+  line-height: 1.2;
+  margin: 0 0 0.5em;
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  font-size: 1.5em;
+}
+h3 {
+  font-size: 1.1em;
+}
+h4 {
+  font-size: 0.95em;
+}
+
+p {
+  margin: 0 0 0.75em;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.mono,
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Math text and numbers always read left-to-right, even inside Persian prose. */
+.ltr,
+.katex,
+.num {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.muted {
+  color: var(--muted);
+}
+.small {
+  font-size: 0.86em;
+}
+
+.c-x { color: var(--c-x); }
+.c-w { color: var(--c-w); }
+.c-b { color: var(--c-b); }
+.c-z { color: var(--c-z); }
+.c-a { color: var(--c-a); }
+.c-yhat { color: var(--c-yhat); }
+.c-y { color: var(--c-y); }
+.c-L { color: var(--c-L); }
+.c-g { color: var(--c-g); }
+.c-lr { color: var(--c-lr); }
+.c-pos { color: var(--c-wpos); }
+.c-neg { color: var(--c-wneg); }
+
+/* ---------- buttons and controls ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 0.9em;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+}
+.btn:hover:not(:disabled) {
+  background: var(--surface-2);
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+:root[data-theme='dark'] .btn.primary {
+  color: #10131c;
+}
+.btn.primary:hover:not(:disabled) {
+  background: var(--accent);
+  filter: brightness(1.08);
+}
+.btn.ghost {
+  border-color: transparent;
+  background: transparent;
+}
+.btn.ghost:hover:not(:disabled) {
+  background: var(--well);
+}
+.btn.sm {
+  padding: 3px 8px;
+  font-size: 0.82em;
+}
+.btn.icon {
+  padding: 5px 7px;
+}
+.btn.active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.grow {
+  flex: 1;
+}
+
+.seg {
+  display: inline-flex;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  flex-wrap: wrap;
+}
+.seg button {
+  border: 0;
+  background: transparent;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 0.86em;
+}
+.seg button + button {
+  border-inline-start: 1px solid var(--line);
+}
+.seg button[aria-pressed='true'] {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+select.select,
+input.field {
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  padding: 4px 8px;
+  font-size: 0.9em;
+}
+input.field {
+  width: 5.5em;
+  font-family: var(--font-mono);
+  direction: ltr;
+}
+
+.slider {
+  display: grid;
+  grid-template-columns: minmax(5.5em, auto) 1fr 4.6em;
+  align-items: center;
+  gap: 10px;
+}
+.slider label {
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+.slider input[type='range'] {
+  width: 100%;
+  accent-color: var(--slider-color, var(--accent));
+}
+.slider input[type='number'] {
+  width: 100%;
+}
+.slider.frozen {
+  opacity: 0.55;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+.card.flat {
+  background: var(--surface-2);
+}
+.card h4 {
+  margin-bottom: 8px;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+  gap: 8px;
+}
+.stat {
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+  padding: 5px 9px;
+  min-width: 0;
+}
+.stat .k {
+  font-size: 0.75em;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+:root[dir='rtl'] .stat .k {
+  text-transform: none;
+  letter-spacing: 0;
+}
+.stat .v {
+  font-family: var(--font-mono);
+  font-size: 1.05em;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.callout {
+  border-inline-start: 3px solid var(--accent);
+  background: var(--accent-soft);
+  padding: 8px 12px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin: 0 0 12px;
+}
+:root[dir='rtl'] .callout {
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+}
+.callout.warn {
+  border-color: var(--c-wneg);
+  background: color-mix(in srgb, var(--c-wneg) 10%, var(--surface));
+}
+.callout.err {
+  border-color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 10%, var(--surface));
+}
+
+.eq {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 2px 0;
+}
+.eq .katex-display {
+  margin: 0.4em 0;
+}
+
+table.tbl {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.86em;
+}
+table.tbl th,
+table.tbl td {
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--line);
+  text-align: start;
+}
+table.tbl td.num,
+table.tbl th.num {
+  text-align: end;
+}
+table.tbl tr.hl td {
+  background: var(--accent-soft);
+}
+
+.kbd {
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  border: 1px solid var(--line-strong);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  padding: 0 5px;
+}
+
+.pulse-in {
+  animation: pulseIn 0.6s ease-out;
+}
+@keyframes pulseIn {
+  from {
+    background: color-mix(in srgb, var(--accent) 22%, transparent);
+  }
+  to {
+    background: transparent;
+  }
+}
+:root[data-motion='reduced'] *,
+:root[data-motion='reduced'] *::before,
+:root[data-motion='reduced'] *::after {
+  animation-duration: 0.001ms !important;
+  transition-duration: 0.001ms !important;
+}
+
+/* KaTeX color classes from \htmlClass */
+.katex .c-x { color: var(--c-x); }
+.katex .c-w { color: var(--c-w); }
+.katex .c-b { color: var(--c-b); }
+.katex .c-z { color: var(--c-z); }
+.katex .c-a { color: var(--c-a); }
+.katex .c-yhat { color: var(--c-yhat); }
+.katex .c-y { color: var(--c-y); }
+.katex .c-L { color: var(--c-L); }
+.katex .c-g { color: var(--c-g); }
+.katex .c-lr { color: var(--c-lr); }
+.katex .hl-box {
+  background: color-mix(in srgb, var(--c-g) 14%, transparent);
+  border-radius: 4px;
+  padding: 0 2px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border-radius: 10px;
+  border: 2px solid var(--bg);
+}
+
+/* ---------- plots ---------- */
+.plot2d {
+  width: 100%;
+  position: relative;
+}
+.plot2d svg {
+  display: block;
+  user-select: none;
+}
+.plot2d .grid line {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+.plot2d .axis0 {
+  stroke: var(--line-strong);
+  stroke-width: 1.2;
+}
+.plot2d .frame {
+  fill: none;
+  stroke: var(--line);
+}
+.plot2d .ticks text {
+  fill: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+.plot2d .lbl {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 3px;
+}
+.axis-label {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.axis-label.x {
+  text-align: center;
+}
+.axis-label.y {
+  padding-left: 4px;
+}
+.plot-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font-size: 12px;
+  color: var(--ink-2);
+  margin-bottom: 4px;
+}
+.plot-legend i {
+  display: inline-block;
+  width: 16px;
+  border-top-width: 2.5px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
